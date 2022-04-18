@@ -12,90 +12,83 @@
 
 public class Liszt<T>
 {
-    private static long _serialVersion = 101; public static long SerialVersion { get; }
+    public static long Version {get{return 101;}}
 
     private Dictionary<string,T> _dictionaryData { get; set; } 
-    private T[] _elementData { get; set; }
+    private T[] _dataInventory { get; set; }
     
-    // Temporaily datas to create new data.
-    private T[] _tempData { get; set; }
-    private Dictionary<string,T> _tempDictionary { get; set; }
-
     private int _size { get; set; } public int Size {get{return _size;}}
+    private int _identicalKeys { get; set; } public int IdenticalKeys { get{return _identicalKeys;} }
 
-
-    public Liszt()
-    {
-        _size = 0;
-        InitiateFields();
-    }
+    public Liszt() { InitiateFields(); }
     public Liszt(T[] initialElements)
     {
-        _size = initialElements.Length;
+        InitiateFields();
         Add(initialElements);
     }
     private void InitiateFields()
     {
-        _elementData = new T[_size];
+        _size = 0;
+        _dataInventory = new T[_size];
         _dictionaryData = new Dictionary<string,T>();
-        _tempDictionary = new Dictionary<string, T>();
+        _identicalKeys = 0;
     }
-    
 
     // Adds an amount of elements in front of the Liszt
     public T[] Add(T[] elements)
     {
-        if (_dictionaryData == null || _elementData == null) { InitiateFields(); }
-
-        _tempData = new T[_size + elements.Length];
-
-        for (int i = 0; i < _tempData.Length; i++)
+        for (int i = 0; i < elements.Length; i++)
         {
-            if (i > _size)
-            {
-                _tempData[i] = _elementData[i];
-                _tempDictionary.Add(_elementData[i].ToString(),_elementData[i]);
-            }
-            else
-            {
-                _tempData[i] = elements[i-_size];
-                _tempDictionary.Add(elements[i-_size].ToString(),elements[i-_size]);
-            }
+            _dataInventory.Append(elements[i]);
+            _dictionaryData.Add(CreateDictionaryKey(elements[i]),elements[i-_size]);
         }
-        FinishAdd();
+        _size = _dataInventory.Length;
 
-        return _elementData;
+        return _dataInventory;
     }
     // Adds an amount of elements in front of the Liszt
     public T[] Add(T element)
     {
-        if (_dictionaryData == null || _elementData == null) { InitiateFields(); }
+        _dataInventory.Append(element);
+        _dataInventory.CopyTo(new T[]{element},_size);
+        _dictionaryData.Add(CreateDictionaryKey(element),element);
+        _size = _dataInventory.Length;
 
-        _tempData = new T[_size + 1];
+        return _dataInventory;
+    }
 
-        for (int i = 0; i < _tempData.Length; i++)
+    private string CreateDictionaryKey(T element)
+    {
+        if (Contains(element.ToString()))
         {
-            if (i > _size)
+            _identicalKeys++;
+            return "This is identical key number " + _identicalKeys;
+        }
+        return element.ToString();
+    }
+    
+    public T Get(T element) { return _dictionaryData[element.ToString()]; }
+    public T Get(string key) { return _dictionaryData[key]; }
+    public T Get(int index) { return _dataInventory[index]; }
+    public T[] GetInventory() {return _dataInventory;}
+
+    public void ClearAll()
+    {
+        InitiateFields();
+        _size = _dataInventory.Length;
+    }
+
+    public bool Contains(T element)
+    {
+        for (int i = 0; i < _size; i++)
+        {
+            if (_dataInventory.Equals(element))
             {
-                _tempData[i] = _elementData[i];
-                _tempDictionary.Add(_elementData[i].ToString(),_elementData[i]);
-            }
-            else
-            {
-                _tempData[i] = element;
-                _tempDictionary.Add(element.ToString(),element);
+                return true;
             }
         }
-        FinishAdd();
-
-        return _elementData;
+        return false;
     }
-
-    private void FinishAdd()
-    {
-        _elementData = _tempData;
-        _tempDictionary.Clear();
-        _tempData = new T[0];
-    }
-
+    public bool Contains(string key) { return _dictionaryData.ContainsKey(key); }
+    
 }
