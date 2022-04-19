@@ -3,8 +3,7 @@
 /*
     Uses Laustrup conventions.
     Differences array wise are:
-    DEFAULT_CAPACITY is 1
-    Index of array starts at 1 instead of 0
+    Index of array starts at 1 instead of 0. 0 is an index for spare data.
     Parameter inputs for initiating values are as T[]
     Has attributes of an array of T and as well an Dictionary. Dictionary's key is the toString of the object.
     That way an object of T can quickly be returned and the whole array can be looped thru easily.
@@ -14,10 +13,10 @@ public class Liszt<T>
 {
     public static long Version {get{return 101;}}
 
-    private Dictionary<string,T> _dictionaryData { get; set; } 
-    private T[] _dataInventory { get; set; }
+    private Dictionary<string,T> _dictionary { get; set; } 
+    private T[] _inventory { get; set; }
     
-    private int _size { get; set; } public int Size {get{return _size;}}
+    public int Size {get{return _inventory.Length-1;}}
     private int _identicalKeys { get; set; } public int IdenticalKeys { get{return _identicalKeys;} }
 
     public Liszt() { InitiateFields(); }
@@ -28,33 +27,45 @@ public class Liszt<T>
     }
     private void InitiateFields()
     {
-        _size = 0;
-        _dataInventory = new T[_size];
-        _dictionaryData = new Dictionary<string,T>();
+        _inventory = new T[1];
+        _dictionary = new Dictionary<string,T>();
         _identicalKeys = 0;
     }
 
     // Adds an amount of elements in front of the Liszt
     public T[] Add(T[] elements)
     {
+        T[] newInventory = _inventory;
+        Array.Resize(ref newInventory,_inventory.Length+elements.Length);
+        
         for (int i = 0; i < elements.Length; i++)
         {
-            _dataInventory.Append(elements[i]);
-            _dictionaryData.Add(CreateDictionaryKey(elements[i]),elements[i-_size]);
+            newInventory[_inventory.Length + i] = elements[i];
+            _dictionary.Add(CreateDictionaryKey(elements[i]),elements[i-Size]);
         }
-        _size = _dataInventory.Length;
+        _inventory = newInventory;
 
-        return _dataInventory;
+        return _inventory;
     }
     // Adds an amount of elements in front of the Liszt
     public T[] Add(T element)
     {
-        _dataInventory.Append(element);
-        _dataInventory.CopyTo(new T[]{element},_size);
-        _dictionaryData.Add(CreateDictionaryKey(element),element);
-        _size = _dataInventory.Length;
+        T[] newInventory = _inventory;
+        Array.Resize(ref newInventory,_inventory.Length+1);
+        
+        newInventory[_inventory.Length] = element;
+        _dictionary.Add(CreateDictionaryKey(element),element);
 
-        return _dataInventory;
+        _inventory = newInventory;
+        
+        return _inventory;
+    }
+
+    public T[] AddSpareData(T element)
+    {
+        _inventory[0] = element;
+        _dictionary.Add("SpareData",element);
+        return _inventory;
     }
 
     private string CreateDictionaryKey(T element)
@@ -67,28 +78,20 @@ public class Liszt<T>
         return element.ToString();
     }
     
-    public T Get(T element) { return _dictionaryData[element.ToString()]; }
-    public T Get(string key) { return _dictionaryData[key]; }
-    public T Get(int index) { return _dataInventory[index]; }
-    public T[] GetInventory() {return _dataInventory;}
+    public T Get(T element) { return _dictionary[element.ToString()]; }
+    public T Get(string key) { return _dictionary[key]; }
+    public T Get(int index) { return _inventory[index]; }
+    public T GetDecremented(int index) { return _inventory[index+1];}
+    public T GetSpareData() {return _dictionary["SpareData"];}
+    public T[] GetInventory() {return _inventory;}
 
-    public void ClearAll()
-    {
-        InitiateFields();
-        _size = _dataInventory.Length;
-    }
+    public void ClearAll() { InitiateFields(); }
 
     public bool Contains(T element)
     {
-        for (int i = 0; i < _size; i++)
-        {
-            if (_dataInventory.Equals(element))
-            {
-                return true;
-            }
-        }
+        for (int i = 0; i < _inventory.Length; i++) { if (_inventory.Equals(element)) { return true; } }
         return false;
     }
-    public bool Contains(string key) { return _dictionaryData.ContainsKey(key); }
+    public bool Contains(string key) { return _dictionary.ContainsKey(key); }
     
 }
