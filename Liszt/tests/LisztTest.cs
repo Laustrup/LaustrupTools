@@ -3,6 +3,7 @@ using Xunit.Abstractions;
 
 namespace Liszt.tests;
 
+// Author Laust Eberhardt Bonnesen
 public class LisztTest
 {
     
@@ -33,35 +34,21 @@ public class LisztTest
     public void AddTest(int amount)
     {
         // Arrange
-        _start = DateTime.Now; 
         _liszt = new Liszt<object>();
-        int[] amountAsArray = new int[amount];
+        
+        int[] expected = new int[amount];
+        for (int i = 0; i < amount; i++) { expected[i] = i+1; }
 
+        _output.WriteLine(expected.Length.ToString());
+        
         // Act
-        for (int i = 0; i < amount; i++)
-        {
-            _liszt.Add(i);
-            amountAsArray[i] = i;
-        }
-        
-        _end = DateTime.Now;
-        _output.WriteLine("Performance time for AddElement = " + _end.Subtract(_start));
-        
-        AssertAdd(amount);
-        
-        _liszt.ClearAll();
-            
         _start = DateTime.Now;
-        _liszt.Add(amountAsArray);
+        _liszt.Add(expected);
         _end = DateTime.Now;
+        _output.WriteLine("Performance time = " + _end.Subtract(_start));
         
-        if(amount!=0) {AssertAdd(amount);}
-        _output.WriteLine("Performance time for AddElements = " + _end.Subtract(_start));
-            
-        _output.WriteLine("\nVersion of Liszt = " + Liszt<object>.Version);
-        
+        // Assert
+        Assert.Equal(amount,_liszt.Size);
+        _liszt.ClearAll();
     }
-    private void AssertAdd(int amount) { Assert.Equal(amount,_liszt.Size); }
-
-
 }

@@ -2,6 +2,7 @@
 
 /*
     Uses Laustrup conventions.
+    
     Differences array wise are:
     Index of array starts at 1 instead of 0. 0 is an index for spare data.
     Parameter inputs for initiating values are as T[]
@@ -9,6 +10,7 @@
     That way an object of T can quickly be returned and the whole array can be looped thru easily.
  */
 
+// Author Laust Eberhardt Bonnesen
 public class Liszt<T>
 {
     // Attributes
@@ -51,10 +53,14 @@ public class Liszt<T>
         T[] newInventory = _inventory;
         Array.Resize(ref newInventory,newInventory.Length+1);
         
+        Console.WriteLine(newInventory);
+        
         // Adding
         newInventory[_inventory.Length] = element;
         _dictionary.Add(DictionaryKey(element),element);
 
+        Console.WriteLine(DictionaryKey(element));
+        
         return newInventory;
     }
     private string DictionaryKey(T element)
