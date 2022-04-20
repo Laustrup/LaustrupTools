@@ -21,6 +21,8 @@ public class Liszt<T>
     
     public int Size {get{return _inventory.Length-1;}}
 
+    private string _spareDataKey {get{return "SPAREDATA";}}
+
     private void InitiateAttributes()
     {
         _inventory = new T[1];
@@ -35,13 +37,12 @@ public class Liszt<T>
         Add(initialElements);
     }
 
-    // Adds an amount of elements in front of the Liszt
+    // Add methods
     public T[] Add(T[] elements)
     {
         for (int i = 0; i < elements.Length; i++) { Add(elements[i]); }
         return _inventory;
     }
-    // Adds an amount of elements in front of the Liszt
     public T[] Add(T element)
     {
         _inventory = CreateNewInventory(element);
@@ -72,16 +73,25 @@ public class Liszt<T>
     public T[] AddSpareData(T element)
     {
         _inventory[0] = element;
-        _dictionary.Add("SPAREDATA",element);
+        _dictionary.Add(_spareDataKey,element);
         return _inventory;
     }
 
+    // Get methods
     public T Get(T element) { return _dictionary[element.ToString()]; }
     public T Get(string key) { return _dictionary[key]; }
     public T Get(int index) { return _inventory[index]; }
     public T GetDecremented(int index) { return _inventory[index+1];}
-    public T GetSpareData() {return _dictionary["SPAREDATA"];}
+    public T GetLastIndex() {return _inventory[_inventory.Length+1];}
+    public T GetFirstIndex() {return _inventory[1];}
+    public T GetSpareData() {return _dictionary[_spareDataKey];}
     public T[] GetInventory() {return _inventory;}
+
+    // Boolean methods
+    public bool FistIndexIs(T element) { return _inventory[1].Equals(element); }
+    public bool FistIndexIs(object element) { return _inventory[1].Equals(element); }
+    public bool LastIndexIs(T element) { return _inventory[Size].Equals(element); } 
+    public bool LastIndexIs(object element) { return _inventory[Size].Equals(element); }
 
     public void ClearAll() { InitiateAttributes(); }
 
@@ -91,5 +101,44 @@ public class Liszt<T>
         return false;
     }
     public bool Contains(string key) { return _dictionary.ContainsKey(key); }
-    
+
+    // Methods for showing indexes
+    public void PrintIndexes()
+    {
+        bool isSpareData = true;
+        
+        Console.Write("{ ");
+        foreach (T index in _inventory)
+        {
+            if (!isSpareData)
+            {
+                if (!LastIndexIs(index)) {Console.Write(index + " - ");}
+                else {Console.Write(index);}
+            }
+            isSpareData = false;
+        }
+        
+        Console.Write(" }");
+    }
+    public override string ToString()
+    {
+        if (Size==0) {return "Liszt is empty...";}
+
+        bool isSpareData = true;
+        
+        string result = "{ ";
+        foreach (T index in _inventory)
+        {
+            if (!isSpareData)
+            {
+                if (!LastIndexIs(index)) {result += index + " - ";}
+                else {result += index;}
+            }
+            isSpareData = false;
+        }
+        result += " }";
+
+        return result;
+    }
+
 }

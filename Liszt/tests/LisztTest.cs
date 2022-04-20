@@ -15,8 +15,7 @@ public class LisztTest
     private readonly ITestOutputHelper _output;
 
     public LisztTest(ITestOutputHelper output) {_output=output;}
-    
-    
+
     public static IEnumerable<object[]> AddInputs()
     {
         yield return new object[] {0};
@@ -39,13 +38,16 @@ public class LisztTest
         int[] expected = new int[amount];
         for (int i = 0; i < amount; i++) { expected[i] = i+1; }
 
-        _output.WriteLine(expected.Length.ToString());
+        _output.WriteLine("Expected indexes are " + expected);
         
         // Act
         _start = DateTime.Now;
         _liszt.Add(expected);
         _end = DateTime.Now;
-        _output.WriteLine("Performance time = " + _end.Subtract(_start));
+        
+        _output.WriteLine("Actual indexes are " + _liszt.ToString() + "\n");
+        _output.WriteLine("\tPerformance time = " + _end.Subtract(_start) + "\n\n");
+        
         
         // Assert
         Assert.Equal(amount,_liszt.Size);
