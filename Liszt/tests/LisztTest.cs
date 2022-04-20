@@ -36,9 +36,16 @@ public class LisztTest
         _liszt = new Liszt<object>();
         
         int[] expected = new int[amount];
-        for (int i = 0; i < amount; i++) { expected[i] = i+1; }
+        string expectedIndexes = "{ ";
+        for (int i = 0; i < amount; i++)
+        {
+            expected[i] = i+1;
+            if (i != amount-1) {expectedIndexes += expected[i] + " - ";}
+            else {expectedIndexes += expected[i];}
+        }
+        expectedIndexes += " }";
 
-        _output.WriteLine("Expected indexes are " + expected);
+        _output.WriteLine("Expected indexes are " + expectedIndexes);
         
         // Act
         _start = DateTime.Now;
@@ -47,10 +54,10 @@ public class LisztTest
         
         _output.WriteLine("Actual indexes are " + _liszt.ToString() + "\n");
         _output.WriteLine("\tPerformance time = " + _end.Subtract(_start) + "\n\n");
-        
-        
+
         // Assert
         Assert.Equal(amount,_liszt.Size);
+        
         _liszt.ClearAll();
     }
 }

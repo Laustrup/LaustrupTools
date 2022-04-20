@@ -1,4 +1,7 @@
-﻿namespace Liszt;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+
+namespace Liszt;
 
 /*
     Uses Laustrup conventions.
@@ -38,16 +41,8 @@ public class Liszt<T>
     }
 
     // Add methods
-    public T[] Add(T[] elements)
-    {
-        for (int i = 0; i < elements.Length; i++) { Add(elements[i]); }
-        return _inventory;
-    }
-    public T[] Add(T element)
-    {
-        _inventory = CreateNewInventory(element);
-        return _inventory;
-    }
+    public T[] Add(T[] elements) { for (int i = 0; i < elements.Length; i++) { Add(elements[i]); } return _inventory; }
+    public T[] Add(T element) { if (element!=null) {_inventory = CreateNewInventory(element);} return _inventory; }
     private T[] CreateNewInventory(T element)
     {
         // Temporally variable 
@@ -105,17 +100,17 @@ public class Liszt<T>
     // Methods for showing indexes
     public void PrintIndexes()
     {
-        bool isSpareData = true;
-        
         Console.Write("{ ");
-        foreach (T index in _inventory)
+        for (int i = 1; i < _inventory.Length;i++)
         {
-            if (!isSpareData)
+            T index = _inventory[i];
+
+            try
             {
-                if (!LastIndexIs(index)) {Console.Write(index + " - ");}
-                else {Console.Write(index);}
+                if (!LastIndexIs(index)) {Console.Write(index.ToString() + " - ");}
+                else {Console.Write(index.ToString());}
             }
-            isSpareData = false;
+            catch (Exception e) {Console.WriteLine(e);}
         }
         
         Console.Write(" }");
@@ -123,22 +118,56 @@ public class Liszt<T>
     public override string ToString()
     {
         if (Size==0) {return "Liszt is empty...";}
-
-        bool isSpareData = true;
         
         string result = "{ ";
-        foreach (T index in _inventory)
+        for (int i = 1; i < _inventory.Length;i++)
         {
-            if (!isSpareData)
+            T index = _inventory[i];
+            Type type = typeof(T).DeclaringType;
+
+            try
             {
-                if (!LastIndexIs(index)) {result += index + " - ";}
-                else {result += index;}
+                if (!LastIndexIs(index)) { result += GetValue<T>(index.ToString()) + " - "; }
+                else { result += GetValue<T>(index.ToString()); }
             }
-            isSpareData = false;
+            catch (Exception e) { Console.WriteLine(e); }
         }
         result += " }";
 
         return result;
     }
+    
+    private T GetValue<T>(object obj)
+    {
+        if (obj != null)
+        {
+            Type type = typeof(T);
+ 
+            T value = default(T);
+            var methodInfo = (from m in type.GetMethods(BindingFlags.Public | BindingFlags.Static)
+                where m.Name == "TryParse"
+                select m).FirstOrDefault();
+ 
+            if (methodInfo == null)
+                throw new ApplicationException("Unable to find TryParse method!");
 
+            object result = methodInfo.Invoke(null, new object[] { obj, value });
+            if ((result != null) && ((bool)result))
+            {
+                methodInfo = (from m in type.GetMethods(BindingFlags.Public | BindingFlags.Static)
+                    where m.Name == "Parse"
+                    select m).FirstOrDefault();
+
+                if (methodInfo == null)
+                    throw new ApplicationException("Unable to find Parse method!");
+
+                value = (T)methodInfo.Invoke(null, new object[] { obj });
+
+                return (T)value;
+            }
+        }
+ 
+        return default(T);
+    }
+    
 }
