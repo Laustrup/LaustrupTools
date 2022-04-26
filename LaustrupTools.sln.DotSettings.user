@@ -4,12 +4,12 @@
     &lt;TestId&gt;xUnit::054BAD37-BB05-4A88-A4B7-56EA5212C773::net6.0::Liszt.tests.LisztTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5aecf256_002Db367_002D491f_002Dacc1_002Dd3c3137449e1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="LisztTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5aecf256_002Db367_002D491f_002Dacc1_002Dd3c3137449e1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="LisztTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::054BAD37-BB05-4A88-A4B7-56EA5212C773::net6.0::Liszt.tests.LisztTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c6433c9a_002D9962_002D44ef_002Db801_002D4deb17f85de1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="LisztTest #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c6433c9a_002D9962_002D44ef_002Db801_002D4deb17f85de1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="LisztTest #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::054BAD37-BB05-4A88-A4B7-56EA5212C773::net6.0::Liszt.tests.LisztTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;

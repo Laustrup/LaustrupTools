@@ -1,20 +1,16 @@
-﻿using Xunit;
+﻿using tests;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace Liszt.tests;
 
 // Author Laust Eberhardt Bonnesen
-public class LisztTest
+public class LisztTest : UnitTest
 {
     
     private Liszt<object> _liszt { get; set; }
-    
-    private DateTime _start { get; set; }
-    private DateTime _end { get; set; }
-    
-    private readonly ITestOutputHelper _output;
 
-    public LisztTest(ITestOutputHelper output) {_output=output;}
+    public LisztTest(ITestOutputHelper output) : base(output) {}
 
     public static IEnumerable<object[]> AddInputs()
     {

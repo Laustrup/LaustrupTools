@@ -4,15 +4,13 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>Listzt</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="c_sharp\sub_liszts" />
+      <Folder Include="c_sharp\sub_printers" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
       <PackageReference Include="xunit" Version="2.4.2-pre.12" />
     </ItemGroup>
 
