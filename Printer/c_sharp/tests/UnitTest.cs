@@ -13,16 +13,19 @@ public abstract class UnitTest
     
     public UnitTest(ITestOutputHelper output) {_output = output;}
 
-    protected TimeSpan CalculatePerformanceTime()
+    protected TimeSpan End()
     {
+        _end = DateTime.Now;
         TimeSpan performanceTime = _end.Subtract(_start);
         Printer.Print("\tPerformance time = " + performanceTime.TotalMinutes);
         _output.WriteLine(Printer.LastPrint);
         return performanceTime;
     }
 
-    protected DateTime DetermineStart() { return _start = DateTime.Now; }
-    protected DateTime DetermineEnd() { return _end = DateTime.Now; }
-    
-    
+    protected DateTime Start()
+    {
+        _start = DateTime.Now;
+        return _start;
+    }
+
 }

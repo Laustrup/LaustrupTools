@@ -70,8 +70,8 @@ public static class Printer
         _print = "{";
         for (int i = 0; i < content.Length; i++)
         {
-            if (i!=content.Length-1) { _print += content[i].ToString() + " - "; }
-            else { _print += content[i].ToString(); }
+            if (i!=content.Length-1) { _print += (string) content[i] + " - "; }
+            else { _print += (string) content[i]; }
         }
         _print += "}";
     }

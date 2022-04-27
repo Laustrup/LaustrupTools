@@ -44,12 +44,9 @@ public class LisztTest : UnitTest
         _output.WriteLine("Expected indexes are " + expectedIndexes);
         
         // Act
-        _start = DateTime.Now;
-        _liszt.Add(expected);
-        _end = DateTime.Now;
+        Start(); _liszt.Add(expected); End();
         
         _output.WriteLine("Actual indexes are " + _liszt.ToString() + "\n");
-        _output.WriteLine("\tPerformance time = " + _end.Subtract(_start) + "\n\n");
 
         // Assert
         Assert.Equal(amount,_liszt.Size);
